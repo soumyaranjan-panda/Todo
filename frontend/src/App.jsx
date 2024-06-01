@@ -1,35 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { useEffect, useState } from "react";
+import { CreateTodo } from "./components/CreateTodo";
+import axios from "axios";
+import { Todo } from "./components/Todo";
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState([]);
+  const fetchFnc = () => {
+    fetch("http://localhost:3000/api/v1/todos").then(async (res) => {
+      const json = await res.json();
+      console.log(json);
+      setTodos(json.response);
+      console.log(todos);
+    });
+  }
+  useEffect(fetchFnc, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className=" flex flex-col bg-blue-300 items-center m-auto w-full h-full p-20">
+      <div className=" w-[50%]">
+        <CreateTodo fetchHandler={fetchFnc}></CreateTodo>
+        <Todo fetchHandler = {fetchFnc} todos={todos}></Todo>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;

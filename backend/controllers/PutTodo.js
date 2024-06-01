@@ -1,17 +1,10 @@
 const Todo = require('../models/Todo')
 const inputValidator = require('../config/validator')
 
-const PutTodo = (req, res) => {
-    const createPayload = req.body
-    const parsedPayload = inputValidator(createPayload)
-    if(!parsedPayload.success){
-        res.status(403).json({
-            msg: "Incorrect input"
-        })
-        return
-    }
+const PutTodo = async (req, res) => {
+    await Todo.findOneAndUpdate({_id: req.body.id}, {completed: true})
     res.json({
-        msg: "Hey there"
+        msg: "Marked Completed"
     })
 }
 
